@@ -1,0 +1,6048 @@
+{
+  "manifest_schema_version": 3,
+  "sdk_version": "5.11.0",
+  "app_id": "yardi-connector",
+  "version": "1.0.0",
+  "name": "Yardi",
+  "description": "Connect your own Yardi Voyager Standard Interfaces (Common Data, Billing & Payments, Vendor Invoicing, Service Requests, Revenue Management, Lease Renewals, ILS/Guest Card) -- read and write properties, units, residents, leases, charges, payments, vendors, payables, purchase orders, budgets, maintenance work orders, lease renewals, and prospect/guest card data across your property management portfolio.",
+  "icon": "icon.svg",
+  "actions_explicit": true,
+  "system": false,
+  "capabilities": [
+    "yardi-connector:read",
+    "yardi-connector:write"
+  ],
+  "tools": [
+    {
+      "name": "connect_yardi",
+      "description": "Connect one of your own Yardi Voyager Standard Interfaces (Common Data, Billing & Payments, Vendor Invoicing, Service Requests, Revenue Management, Lease Renewals, or ILS/Guest Card) by saving its WSDL URL and Login-block credentials, after checking it actually works.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "create:connection"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "wsdl_url": {
+            "default": "",
+            "description": "Full WSDL URL for this interface, e.g. https://www.yardiasp13.com/yourclient/webservices/ItfCommonData.asmx?WSDL",
+            "title": "Wsdl Url",
+            "type": "string"
+          },
+          "interface": {
+            "default": "common_data",
+            "description": "Which Yardi Standard Interface this WSDL belongs to: common_data, billing_and_payments, vendor_invoicing, service_requests, revenue_management, lease_renewals, or ils_guest_card.",
+            "title": "Interface",
+            "type": "string"
+          },
+          "username": {
+            "default": "",
+            "description": "Yardi Voyager UserName for this interface's Login block.",
+            "title": "Username",
+            "type": "string"
+          },
+          "password": {
+            "default": "",
+            "description": "Yardi Voyager Password for this interface's Login block.",
+            "title": "Password",
+            "type": "string"
+          },
+          "server_name": {
+            "default": "",
+            "description": "Yardi ServerName (from Voyager Administration > About > URL).",
+            "title": "Server Name",
+            "type": "string"
+          },
+          "database": {
+            "default": "",
+            "description": "Yardi Database name for this Voyager instance.",
+            "title": "Database",
+            "type": "string"
+          },
+          "platform": {
+            "default": "",
+            "description": "Yardi Platform value (as issued by your Yardi representative).",
+            "title": "Platform",
+            "type": "string"
+          },
+          "interface_entity": {
+            "default": "",
+            "description": "Yardi InterfaceEntity value for this interface license.",
+            "title": "Interface Entity",
+            "type": "string"
+          },
+          "interface_license": {
+            "default": "",
+            "description": "Yardi InterfaceLicense key issued for this specific interface.",
+            "title": "Interface License",
+            "type": "string"
+          },
+          "label": {
+            "default": "",
+            "description": "Optional friendly name for this interface connection, e.g. 'Acme Portfolio - Billing'.",
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "title": "ConnectYardiParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "default": "",
+            "title": "Id",
+            "type": "string"
+          },
+          "title": {
+            "default": "",
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "connected": {
+            "default": false,
+            "title": "Connected",
+            "type": "boolean"
+          },
+          "detail": {
+            "default": "",
+            "title": "Detail",
+            "type": "string"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "wsdl_url": {
+            "default": "",
+            "title": "Wsdl Url",
+            "type": "string"
+          }
+        },
+        "title": "ProviderConnection",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "yardi-connector.connect_yardi",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "list_connections",
+      "description": "List your saved Yardi Voyager interface connections.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "description": "Explicit empty params model -- V17 disallows untyped handlers.",
+        "properties": {},
+        "title": "NoParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "ProviderConnection": {
+            "properties": {
+              "id": {
+                "default": "",
+                "title": "Id",
+                "type": "string"
+              },
+              "title": {
+                "default": "",
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "connected": {
+                "default": false,
+                "title": "Connected",
+                "type": "boolean"
+              },
+              "detail": {
+                "default": "",
+                "title": "Detail",
+                "type": "string"
+              },
+              "interface": {
+                "default": "",
+                "title": "Interface",
+                "type": "string"
+              },
+              "wsdl_url": {
+                "default": "",
+                "title": "Wsdl Url",
+                "type": "string"
+              }
+            },
+            "title": "ProviderConnection",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "connections": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/ProviderConnection"
+            },
+            "title": "Connections",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "ProviderConnectionList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "disconnect_yardi",
+      "description": "Disconnect a saved Yardi Voyager interface connection: deletes the saved WSDL URL and credentials. Nothing in Yardi itself is changed.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "delete:connection"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the interface connection to disconnect.",
+            "title": "Connection Id",
+            "type": "string"
+          }
+        },
+        "title": "DisconnectYardiParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "default": "",
+            "title": "Id",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "default": false,
+            "title": "Deleted",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "yardi-connector.disconnect_yardi",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "list_yardi_properties",
+      "description": "List properties visible to this Yardi Common Data interface connection.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Common Data interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          }
+        },
+        "title": "ListPropertiesParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "get_yardi_unit_information",
+      "description": "Read unit-level information (unit types, status, rent) for a Yardi property.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Common Data interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id, e.g. 'p1001'.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "unit_id": {
+            "default": "",
+            "description": "Yardi unit id, if narrowing to one unit.",
+            "title": "Unit Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "UnitInfoParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "list_yardi_residents",
+      "description": "List current residents/tenants for a Yardi property.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Common Data interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id, e.g. 'p1001'.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "PropertyRefParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "get_yardi_resident_info",
+      "description": "Read one resident/tenant's full record by property and tenant code.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Common Data interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id, e.g. 'p1001'.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "tenant_code": {
+            "default": "",
+            "description": "Yardi tenant/resident code, if narrowing to one resident.",
+            "title": "Tenant Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "ResidentRefParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "list_yardi_rentroll",
+      "description": "Read a property's rent roll (units, occupancy, rent amounts) as of a given date.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Common Data interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id, e.g. 'p1001'.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "RentrollParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "import_yardi_contacts",
+      "description": "Import a batch of contacts/prospects into this Yardi Common Data interface.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "create:contact"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Common Data interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id the contact belongs to.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "contacts_json": {
+            "description": "JSON array of contact objects, matching the Common Data ImportContacts XML shape, e.g. [{\"FirstName\": \"Jane\", \"LastName\": \"Doe\", \"Role\": \"Emergency\"}].",
+            "title": "Contacts Json",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id",
+          "contacts_json"
+        ],
+        "title": "ImportContactsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "get_yardi_lease_information",
+      "description": "Read one tenant's lease information (term, rent, dates) by property and tenant code.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Common Data interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id, e.g. 'p1001'.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "tenant_code": {
+            "default": "",
+            "description": "Yardi tenant/resident code, if narrowing to one lease.",
+            "title": "Tenant Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "LeaseInfoParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "list_yardi_resident_transactions",
+      "description": "List resident ledger transactions (charges/payments) for a Yardi property, optionally in a date range.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Billing & Payments interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id, e.g. 'p1001'.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "from_date": {
+            "default": "",
+            "description": "Start date, YYYY-MM-DD. Leave blank for all transactions.",
+            "title": "From Date",
+            "type": "string"
+          },
+          "to_date": {
+            "default": "",
+            "description": "End date, YYYY-MM-DD.",
+            "title": "To Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "ResidentTransactionsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "import_yardi_charge",
+      "description": "Post a new charge to a resident's ledger in Yardi (e.g. a late fee or one-time charge).",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "create:charge"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Billing & Payments interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id the charge is posted to.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "tenant_code": {
+            "description": "Yardi tenant/resident code the charge applies to.",
+            "title": "Tenant Code",
+            "type": "string"
+          },
+          "charge_code": {
+            "description": "Yardi charge code, e.g. 'LATE' or 'RENT'.",
+            "title": "Charge Code",
+            "type": "string"
+          },
+          "amount": {
+            "description": "Charge amount, e.g. 150.00.",
+            "title": "Amount",
+            "type": "number"
+          },
+          "charge_date": {
+            "description": "Date the charge is posted on, YYYY-MM-DD.",
+            "title": "Charge Date",
+            "type": "string"
+          },
+          "memo": {
+            "default": "",
+            "description": "Optional memo/description shown on the resident's ledger.",
+            "title": "Memo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id",
+          "tenant_code",
+          "charge_code",
+          "amount",
+          "charge_date"
+        ],
+        "title": "ImportChargeParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "import_yardi_receipt",
+      "description": "Record a payment received from a resident in Yardi.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "create:payment"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Billing & Payments interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id the payment is received at.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "tenant_code": {
+            "description": "Yardi tenant/resident code making the payment.",
+            "title": "Tenant Code",
+            "type": "string"
+          },
+          "amount": {
+            "description": "Payment amount received, e.g. 1200.00.",
+            "title": "Amount",
+            "type": "number"
+          },
+          "receipt_date": {
+            "description": "Date the payment was received, YYYY-MM-DD.",
+            "title": "Receipt Date",
+            "type": "string"
+          },
+          "payment_type": {
+            "default": "",
+            "description": "Payment method/type, e.g. 'Check', 'ACH', 'CreditCard'.",
+            "title": "Payment Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id",
+          "tenant_code",
+          "amount",
+          "receipt_date"
+        ],
+        "title": "ImportReceiptParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "import_yardi_payable",
+      "description": "Post a vendor payable (an amount owed to a vendor) in Yardi.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "create:payable"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Billing & Payments interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id the payable is against.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "vendor_code": {
+            "description": "Yardi vendor code being paid.",
+            "title": "Vendor Code",
+            "type": "string"
+          },
+          "amount": {
+            "description": "Payable amount, e.g. 4500.00.",
+            "title": "Amount",
+            "type": "number"
+          },
+          "invoice_date": {
+            "description": "Vendor invoice date, YYYY-MM-DD.",
+            "title": "Invoice Date",
+            "type": "string"
+          },
+          "invoice_number": {
+            "default": "",
+            "description": "Vendor's own invoice number, for reconciliation.",
+            "title": "Invoice Number",
+            "type": "string"
+          },
+          "gl_account": {
+            "default": "",
+            "description": "GL account code to post the payable against.",
+            "title": "Gl Account",
+            "type": "string"
+          },
+          "memo": {
+            "default": "",
+            "description": "Optional memo describing the payable.",
+            "title": "Memo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id",
+          "vendor_code",
+          "amount",
+          "invoice_date"
+        ],
+        "title": "ImportPayableParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "get_yardi_vendor",
+      "description": "Look up a vendor's own record on this Yardi Billing & Payments interface.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "vendor_code": {
+            "default": "",
+            "description": "Yardi vendor code, if looking up one vendor.",
+            "title": "Vendor Code",
+            "type": "string"
+          }
+        },
+        "title": "VendorRefParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "get_yardi_delinquency_report",
+      "description": "Value-add report: scan a property's resident transactions and build a delinquency list -- residents with a positive outstanding balance, sorted by amount owed. Not a native Yardi operation; built from GetResidentTransactions_ByChargeDate_Login.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Billing & Payments interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id to build the delinquency report for.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "as_of_date": {
+            "default": "",
+            "description": "Report as-of date, YYYY-MM-DD. Leave blank for today.",
+            "title": "As Of Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "DelinquencyReportParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "DelinquentResident": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "tenant_code": {
+                "default": "",
+                "title": "Tenant Code",
+                "type": "string"
+              },
+              "resident_name": {
+                "default": "",
+                "title": "Resident Name",
+                "type": "string"
+              },
+              "balance_due": {
+                "default": 0.0,
+                "title": "Balance Due",
+                "type": "number"
+              },
+              "days_late": {
+                "default": 0,
+                "title": "Days Late",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "id",
+              "title"
+            ],
+            "title": "DelinquentResident",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "yardi_property_id": {
+            "default": "",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "as_of_date": {
+            "default": "",
+            "title": "As Of Date",
+            "type": "string"
+          },
+          "total_balance_due": {
+            "default": 0.0,
+            "title": "Total Balance Due",
+            "type": "number"
+          },
+          "residents": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/DelinquentResident"
+            },
+            "title": "Residents",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "DelinquencyReport",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "list_yardi_invoice_register",
+      "description": "List vendor invoices recorded in Yardi's invoice register, optionally scoped to one property and date range.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Vendor Invoicing interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "default": "",
+            "description": "Yardi property id to scope invoices to. Leave blank for all properties this license covers.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "from_date": {
+            "default": "",
+            "description": "Start date, YYYY-MM-DD.",
+            "title": "From Date",
+            "type": "string"
+          },
+          "to_date": {
+            "default": "",
+            "description": "End date, YYYY-MM-DD.",
+            "title": "To Date",
+            "type": "string"
+          }
+        },
+        "title": "InvoiceRegisterParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "import_yardi_invoice",
+      "description": "Post a new vendor invoice into Yardi's invoice register.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "create:invoice"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Vendor Invoicing interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id the invoice is for.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "vendor_code": {
+            "description": "Yardi vendor code on the invoice.",
+            "title": "Vendor Code",
+            "type": "string"
+          },
+          "invoice_number": {
+            "description": "Vendor's own invoice number.",
+            "title": "Invoice Number",
+            "type": "string"
+          },
+          "invoice_date": {
+            "description": "Invoice date, YYYY-MM-DD.",
+            "title": "Invoice Date",
+            "type": "string"
+          },
+          "amount": {
+            "description": "Invoice total amount, e.g. 3200.00.",
+            "title": "Amount",
+            "type": "number"
+          },
+          "gl_account": {
+            "default": "",
+            "description": "GL account code to post the invoice against.",
+            "title": "Gl Account",
+            "type": "string"
+          },
+          "purchase_order_number": {
+            "default": "",
+            "description": "Related purchase order number, if any.",
+            "title": "Purchase Order Number",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id",
+          "vendor_code",
+          "invoice_number",
+          "invoice_date",
+          "amount"
+        ],
+        "title": "ImportInvoiceRegisterParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "list_yardi_purchase_orders",
+      "description": "List purchase orders for a Yardi property, optionally filtered by modification date.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Vendor Invoicing interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "default": "",
+            "description": "Yardi property id to scope purchase orders to.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "from_date": {
+            "default": "",
+            "description": "Only POs modified on/after this date, YYYY-MM-DD. Leave blank for all.",
+            "title": "From Date",
+            "type": "string"
+          }
+        },
+        "title": "PurchaseOrderParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "import_yardi_purchase_order",
+      "description": "Create a new purchase order in Yardi for a vendor.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "create:purchase_order"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Vendor Invoicing interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id the PO is for.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "vendor_code": {
+            "description": "Yardi vendor code the PO is issued to.",
+            "title": "Vendor Code",
+            "type": "string"
+          },
+          "amount": {
+            "description": "Total PO amount, e.g. 8000.00.",
+            "title": "Amount",
+            "type": "number"
+          },
+          "description": {
+            "default": "",
+            "description": "Short description of what the PO covers.",
+            "title": "Description",
+            "type": "string"
+          },
+          "gl_account": {
+            "default": "",
+            "description": "GL account code the PO should post against.",
+            "title": "Gl Account",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id",
+          "vendor_code",
+          "amount"
+        ],
+        "title": "ImportPurchaseOrderParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "get_yardi_job_cost",
+      "description": "Read job cost data for a Yardi property (Vendor Invoicing interface).",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Vendor Invoicing interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id to read job cost data for.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "JobCostParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "get_yardi_budget",
+      "description": "Read budget data for a Yardi property, optionally for one specific month.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Vendor Invoicing interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id to read the budget for.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "month": {
+            "default": "",
+            "description": "Specific budget month, YYYY-MM. Leave blank for the full-year budget.",
+            "title": "Month",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "BudgetParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "search_yardi_service_requests",
+      "description": "Search maintenance/service requests for a Yardi property, optionally in a date range.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Service Requests interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id to search service requests within.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "from_date": {
+            "default": "",
+            "description": "Start date, YYYY-MM-DD. Leave blank for all open requests.",
+            "title": "From Date",
+            "type": "string"
+          },
+          "to_date": {
+            "default": "",
+            "description": "End date, YYYY-MM-DD.",
+            "title": "To Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "ServiceRequestSearchParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "create_yardi_service_request",
+      "description": "Create a new maintenance/service request against a Yardi unit.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "create:service_request"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Service Requests interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id the request is for.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "unit_id": {
+            "description": "Yardi unit id the maintenance request applies to.",
+            "title": "Unit Id",
+            "type": "string"
+          },
+          "tenant_code": {
+            "default": "",
+            "description": "Yardi tenant/resident code reporting the issue, if applicable.",
+            "title": "Tenant Code",
+            "type": "string"
+          },
+          "problem_description": {
+            "description": "Description of the maintenance issue, e.g. 'Leaking kitchen faucet'.",
+            "title": "Problem Description",
+            "type": "string"
+          },
+          "priority": {
+            "default": "Normal",
+            "description": "Request priority, e.g. 'Normal', 'Urgent', 'Emergency'.",
+            "title": "Priority",
+            "type": "string"
+          },
+          "category": {
+            "default": "",
+            "description": "Maintenance category/custom value code, if your Voyager setup requires one.",
+            "title": "Category",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id",
+          "unit_id",
+          "problem_description"
+        ],
+        "title": "CreateServiceRequestParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "list_yardi_service_request_attachments",
+      "description": "List attachment types and charge codes configured for service requests on a Yardi property.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Service Requests interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "service_request_id": {
+            "description": "Yardi service request id to search attachments for.",
+            "title": "Service Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "service_request_id"
+        ],
+        "title": "ServiceRequestAttachmentParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "get_yardi_open_work_orders_report",
+      "description": "Value-add report: list open (not closed/completed/cancelled) service requests for a Yardi property, sorted by priority, flagging urgent/emergency ones. Not a native Yardi operation.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Service Requests interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id to build the open work orders report for.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "OpenWorkOrdersReportParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "OpenWorkOrder": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "default": "",
+                "title": "Description",
+                "type": "string"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "service_request_id": {
+                "default": "",
+                "title": "Service Request Id",
+                "type": "string"
+              },
+              "unit_id": {
+                "default": "",
+                "title": "Unit Id",
+                "type": "string"
+              },
+              "priority": {
+                "default": "",
+                "title": "Priority",
+                "type": "string"
+              },
+              "days_open": {
+                "default": 0,
+                "title": "Days Open",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "id",
+              "title"
+            ],
+            "title": "OpenWorkOrder",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "yardi_property_id": {
+            "default": "",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "open_count": {
+            "default": 0,
+            "title": "Open Count",
+            "type": "integer"
+          },
+          "urgent_count": {
+            "default": 0,
+            "title": "Urgent Count",
+            "type": "integer"
+          },
+          "work_orders": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/OpenWorkOrder"
+            },
+            "title": "Work Orders",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "OpenWorkOrdersReport",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "get_yardi_revenue_data",
+      "description": "Read revenue management data (pricing/availability recommendations) for a Yardi property.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Revenue Management interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id to read revenue management data for.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "RevenuePropertyParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "import_yardi_revenue_update",
+      "description": "Push a unit-level rent/pricing update into Yardi Revenue Management.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "update:pricing"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Revenue Management interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id the revenue import applies to.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "payload_json": {
+            "description": "JSON object matching the Revenue Management ImportRM/ImportMR XML shape for this property (unit-level rent/pricing updates).",
+            "title": "Payload Json",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id",
+          "payload_json"
+        ],
+        "title": "ImportRevenueParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "list_yardi_scheduled_renewals",
+      "description": "List leases scheduled for renewal at a Yardi property.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Lease Renewals interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id to read scheduled lease renewals for.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "ScheduledRenewalsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "list_yardi_lease_offers",
+      "description": "List generated lease renewal offers, optionally scoped to one property.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Lease Renewals interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "default": "",
+            "description": "Yardi property id to scope lease offers to. Leave blank for all properties this license covers.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          }
+        },
+        "title": "LeaseOffersParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "import_yardi_renewal_selection",
+      "description": "Record a resident's selected lease renewal offer in Yardi.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "update:lease"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Lease Renewals interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id the renewal applies to.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "tenant_code": {
+            "description": "Yardi tenant/resident code renewing their lease.",
+            "title": "Tenant Code",
+            "type": "string"
+          },
+          "selected_offer_id": {
+            "description": "The lease offer id (from list_lease_offers) the resident selected.",
+            "title": "Selected Offer Id",
+            "type": "string"
+          },
+          "new_lease_start": {
+            "default": "",
+            "description": "New lease start date, YYYY-MM-DD, if different from the offer default.",
+            "title": "New Lease Start",
+            "type": "string"
+          },
+          "new_lease_end": {
+            "default": "",
+            "description": "New lease end date, YYYY-MM-DD, if different from the offer default.",
+            "title": "New Lease End",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id",
+          "tenant_code",
+          "selected_offer_id"
+        ],
+        "title": "ImportRenewalSelectionParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "list_yardi_available_units",
+      "description": "List units currently available for lease at a Yardi property (ILS/Guest Card interface).",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the ILS/Guest Card interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id to check unit availability for.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "AvailableUnitsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "import_yardi_guest_card",
+      "description": "Import a new prospect (guest card) into Yardi's ILS pipeline -- e.g. from a website lead form.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "create:prospect"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the ILS/Guest Card interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id the prospect is interested in.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "first_name": {
+            "description": "Prospect's first name.",
+            "title": "First Name",
+            "type": "string"
+          },
+          "last_name": {
+            "description": "Prospect's last name.",
+            "title": "Last Name",
+            "type": "string"
+          },
+          "email": {
+            "default": "",
+            "description": "Prospect's email address.",
+            "title": "Email",
+            "type": "string"
+          },
+          "phone": {
+            "default": "",
+            "description": "Prospect's phone number.",
+            "title": "Phone",
+            "type": "string"
+          },
+          "source": {
+            "default": "",
+            "description": "Lead source name, e.g. 'Zillow', 'Apartments.com', 'Walk-in'.",
+            "title": "Source",
+            "type": "string"
+          },
+          "desired_move_in": {
+            "default": "",
+            "description": "Prospect's desired move-in date, YYYY-MM-DD.",
+            "title": "Desired Move In",
+            "type": "string"
+          },
+          "notes": {
+            "default": "",
+            "description": "Any free-text notes about the prospect's visit/interest.",
+            "title": "Notes",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id",
+          "first_name",
+          "last_name"
+        ],
+        "title": "ImportGuestCardParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "search_yardi_guest_activity",
+      "description": "Search prospect/guest activity (tours, follow-ups) for a Yardi property, optionally in a date range.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the ILS/Guest Card interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id to search prospect/guest activity for.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "from_date": {
+            "default": "",
+            "description": "Start date, YYYY-MM-DD. Leave blank for all activity.",
+            "title": "From Date",
+            "type": "string"
+          },
+          "to_date": {
+            "default": "",
+            "description": "End date, YYYY-MM-DD.",
+            "title": "To Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id"
+        ],
+        "title": "GuestActivitySearchParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "records": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Records",
+            "type": "array"
+          },
+          "record_count": {
+            "default": 0,
+            "title": "Record Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecordList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "get_yardi_application",
+      "description": "Read one rental application in full from Yardi ILS/Guest Card.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the ILS/Guest Card interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "application_id": {
+            "description": "Yardi application id to read.",
+            "title": "Application Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "application_id"
+        ],
+        "title": "ApplicationParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "import_yardi_application",
+      "description": "Submit a new rental application into Yardi ILS/Guest Card for a specific unit.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "create:application"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the ILS/Guest Card interface connection to use.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "yardi_property_id": {
+            "description": "Yardi property id the application is for.",
+            "title": "Yardi Property Id",
+            "type": "string"
+          },
+          "unit_id": {
+            "description": "Yardi unit id being applied for.",
+            "title": "Unit Id",
+            "type": "string"
+          },
+          "first_name": {
+            "description": "Applicant's first name.",
+            "title": "First Name",
+            "type": "string"
+          },
+          "last_name": {
+            "description": "Applicant's last name.",
+            "title": "Last Name",
+            "type": "string"
+          },
+          "email": {
+            "default": "",
+            "description": "Applicant's email address.",
+            "title": "Email",
+            "type": "string"
+          },
+          "desired_move_in": {
+            "default": "",
+            "description": "Applicant's desired move-in date, YYYY-MM-DD.",
+            "title": "Desired Move In",
+            "type": "string"
+          }
+        },
+        "required": [
+          "yardi_property_id",
+          "unit_id",
+          "first_name",
+          "last_name"
+        ],
+        "title": "ImportApplicationParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "interface": {
+            "default": "",
+            "title": "Interface",
+            "type": "string"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Record",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiRecord",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "call_yardi_operation",
+      "description": "Call ANY SOAP operation on a connected Yardi interface by its exact name (e.g. GetResidents, ImportCharge_Login, GetPurchaseOrders) -- full coverage beyond the curated wrapper functions, for operations not yet given their own dedicated tool.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [
+        "external:soap_call"
+      ],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Yardi interface connection to use. Omit to use the only/most recent one for that interface.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "operation": {
+            "description": "Exact SOAP operation name to call, e.g. GetResidents, ImportCharge_Login, GetPurchaseOrders.",
+            "title": "Operation",
+            "type": "string"
+          },
+          "parameters_json": {
+            "default": "{}",
+            "description": "JSON object of the operation's own parameters (excluding the Login block, which is added automatically), e.g. {\"YardiPropertyId\": \"123\", \"FromDate\": \"2026-01-01\"}.",
+            "title": "Parameters Json",
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation"
+        ],
+        "title": "CallYardiOperationParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "operation": {
+            "default": "",
+            "title": "Operation",
+            "type": "string"
+          },
+          "raw_xml": {
+            "default": "",
+            "title": "Raw Xml",
+            "type": "string"
+          },
+          "parsed": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Parsed",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "YardiOperationResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "list_yardi_wsdl_operations",
+      "description": "Introspect a connected Yardi interface's own WSDL and list every SOAP operation it actually exposes -- use this to discover exact operation names before calling call_yardi_operation, since licensed operation sets can differ between Voyager deployments.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Yardi interface connection whose WSDL to introspect.",
+            "title": "Connection Id",
+            "type": "string"
+          }
+        },
+        "title": "ListWsdlOperationsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "WsdlOperation": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "name": {
+                "default": "",
+                "title": "Name",
+                "type": "string"
+              },
+              "soap_action": {
+                "default": "",
+                "title": "Soap Action",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title"
+            ],
+            "title": "WsdlOperation",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "target_namespace": {
+            "default": "",
+            "title": "Target Namespace",
+            "type": "string"
+          },
+          "operations": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/WsdlOperation"
+            },
+            "title": "Operations",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "WsdlOperationList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    },
+    {
+      "name": "audit_yardi_properties",
+      "description": "Value-add report: scan every property visible to this Yardi Common Data connection and flag data-quality issues -- properties missing a name, missing an address, or with obviously malformed ids. Not a native Yardi operation.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "ID of the Common Data interface connection to audit.",
+            "title": "Connection Id",
+            "type": "string"
+          }
+        },
+        "title": "AuditPropertiesParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "AuditFinding": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "severity": {
+                "default": "",
+                "title": "Severity",
+                "type": "string"
+              },
+              "yardi_property_id": {
+                "default": "",
+                "title": "Yardi Property Id",
+                "type": "string"
+              },
+              "message": {
+                "default": "",
+                "title": "Message",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title"
+            ],
+            "title": "AuditFinding",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "checked_at": {
+            "default": "",
+            "title": "Checked At",
+            "type": "string"
+          },
+          "property_count": {
+            "default": 0,
+            "title": "Property Count",
+            "type": "integer"
+          },
+          "findings": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/AuditFinding"
+            },
+            "title": "Findings",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "AuditReport",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "yardi_connector"
+    }
+  ],
+  "signals": [],
+  "schedules": [],
+  "required_scopes": [],
+  "icon_size_bytes": 4492,
+  "secrets": [
+    {
+      "name": "yardi_connections",
+      "description": "Saved Yardi Voyager interface connections -- stored as a JSON array, one entry per connected Standard Interface, each with its own WSDL URL and Login-block credentials (UserName, Password, ServerName, Database, Platform, InterfaceEntity, InterfaceLicense) and a label. Managed through connect_yardi / disconnect_yardi -- you should not need to edit this directly.",
+      "required": false,
+      "write_mode": "both",
+      "max_bytes": 65536,
+      "scope": "user",
+      "rotation_hint_days": 180
+    }
+  ],
+  "panels": [
+    {
+      "panel_id": "secrets",
+      "slot": "right",
+      "title": "Secrets",
+      "tree": {},
+      "icon": "KeyRound",
+      "refresh": "manual",
+      "center_overlay": false
+    },
+    {
+      "panel_id": "yardi_connect",
+      "slot": "left",
+      "title": "Yardi",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": false,
+      "default_width": 340,
+      "min_width": 280,
+      "max_width": 440
+    },
+    {
+      "panel_id": "yardi_center",
+      "slot": "center",
+      "title": "Yardi",
+      "tree": {},
+      "icon": "🏢",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "yardi_settings",
+      "slot": "center",
+      "title": "Yardi — App settings",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "yardi_help",
+      "slot": "center",
+      "title": "About Yardi Connector",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    }
+  ]
+}
