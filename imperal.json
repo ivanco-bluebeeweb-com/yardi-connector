@@ -1,6 +1,6 @@
 {
   "manifest_schema_version": 3,
-  "sdk_version": "5.11.0",
+  "sdk_version": "5.13.0",
   "app_id": "yardi-connector",
   "version": "1.0.0",
   "name": "Yardi",
@@ -1292,7 +1292,7 @@
         "type": "object",
         "x-sdl": "entity"
       },
-      "event": "",
+      "event": "yardi-connector.import_yardi_contacts",
       "background": false,
       "long_running": false,
       "scopes": [],
@@ -1734,7 +1734,7 @@
         "type": "object",
         "x-sdl": "entity"
       },
-      "event": "",
+      "event": "yardi-connector.import_yardi_charge",
       "background": false,
       "long_running": false,
       "scopes": [],
@@ -1888,7 +1888,7 @@
         "type": "object",
         "x-sdl": "entity"
       },
-      "event": "",
+      "event": "yardi-connector.import_yardi_receipt",
       "background": false,
       "long_running": false,
       "scopes": [],
@@ -2054,7 +2054,7 @@
         "type": "object",
         "x-sdl": "entity"
       },
-      "event": "",
+      "event": "yardi-connector.import_yardi_payable",
       "background": false,
       "long_running": false,
       "scopes": [],
@@ -2734,7 +2734,7 @@
         "type": "object",
         "x-sdl": "entity"
       },
-      "event": "",
+      "event": "yardi-connector.import_yardi_invoice",
       "background": false,
       "long_running": false,
       "scopes": [],
@@ -3028,7 +3028,7 @@
         "type": "object",
         "x-sdl": "entity"
       },
-      "event": "",
+      "event": "yardi-connector.import_yardi_purchase_order",
       "background": false,
       "long_running": false,
       "scopes": [],
@@ -3614,7 +3614,7 @@
         "type": "object",
         "x-sdl": "entity"
       },
-      "event": "",
+      "event": "yardi-connector.create_yardi_service_request",
       "background": false,
       "long_running": false,
       "scopes": [],
@@ -4243,7 +4243,7 @@
         "type": "object",
         "x-sdl": "entity"
       },
-      "event": "",
+      "event": "yardi-connector.import_yardi_revenue_update",
       "background": false,
       "long_running": false,
       "scopes": [],
@@ -4667,7 +4667,7 @@
         "type": "object",
         "x-sdl": "entity"
       },
-      "event": "",
+      "event": "yardi-connector.import_yardi_renewal_selection",
       "background": false,
       "long_running": false,
       "scopes": [],
@@ -4975,7 +4975,7 @@
         "type": "object",
         "x-sdl": "entity"
       },
-      "event": "",
+      "event": "yardi-connector.import_yardi_guest_card",
       "background": false,
       "long_running": false,
       "scopes": [],
@@ -5411,7 +5411,7 @@
         "type": "object",
         "x-sdl": "entity"
       },
-      "event": "",
+      "event": "yardi-connector.import_yardi_application",
       "background": false,
       "long_running": false,
       "scopes": [],
@@ -5547,7 +5547,7 @@
         "type": "object",
         "x-sdl": "entity"
       },
-      "event": "",
+      "event": "yardi-connector.call_yardi_operation",
       "background": false,
       "long_running": false,
       "scopes": [],
@@ -5983,7 +5983,12 @@
   "signals": [],
   "schedules": [],
   "required_scopes": [],
-  "icon_size_bytes": 4492,
+  "icon_size_bytes": 880,
+  "lifecycle": {
+    "health_check": {
+      "interval_sec": 60
+    }
+  },
   "secrets": [
     {
       "name": "yardi_connections",
