@@ -124,6 +124,9 @@ async def yardi_connect_panel(ctx, **kwargs) -> ui.UINode:
         header,
         _connections_summary(connections),
         ui.Divider(),
+        ui.Button("View property audit", variant="primary", size="sm", full_width=True,
+                  icon="Building2", on_click=ui.Call("__panel__yardi_center")),
+        ui.Divider(),
         _connect_form(),
         ui.Divider(),
         _settings_button(),
@@ -139,7 +142,29 @@ async def yardi_center_panel(ctx, **kwargs) -> ui.UINode:
     slot="center" panel is registered but the Panel app never fetches it
     at session-init without that flag. Text is the shared canonical
     wording -- must stay identical across every app in this situation."""
-    return ui.Empty(
-        message="Nothing to show here -- this app is managed entirely from the sidebar.",
-        icon="👈",
-    )
+    connections = await _load_connections(ctx)
+    if not connections:
+        return ui.Empty(message="Connect a Yardi interface from the sidebar to see it here.", icon="🏢")
+
+    import handlers_audit as ha
+    from schemas import AuditPropertiesParams
+    common_data_conns = [c for c in connections if c.get("interface_type") == "common_data"] or connections
+    conn_id = common_data_conns[0].get("id", "")
+    result = await ha.audit_yardi_properties(ctx, AuditPropertiesParams(connection_id=conn_id))
+    body: list[ui.UINode] = [ui.Text("Property audit", variant="subtitle")]
+    if result.success and result.data:
+        r = result.data
+        body.append(ui.Stats(children=[
+            ui.Stat(label="Properties", value=str(r.property_count)),
+            ui.Stat(label="Findings", value=str(len(r.findings))),
+        ]))
+        for f in r.findings[:15]:
+            color = {"high": "red", "medium": "yellow"}.get(f.severity, "gray")
+            body.append(ui.Stack(direction="h", gap=2, align="center", children=[
+                ui.Badge(label=(f.severity or "info").upper(), color=color),
+                ui.Text(f.message, variant="body"),
+            ]))
+    else:
+        body.append(ui.Text("Could not load the property audit.", variant="caption"))
+
+    return ui.Stack(direction="v", gap=3, align="stretch", children=body)
