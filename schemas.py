@@ -54,6 +54,8 @@ class ProviderConnection(sdl.Entity):
 
 
 class ProviderConnectionList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     connections: list[ProviderConnection] = []
 
 
@@ -62,6 +64,7 @@ class DisconnectYardiParams(BaseModel):
 
 
 class DeleteResult(sdl.Entity):
+    title: str = ""
     deleted: bool = False
     id: str = ""
 
@@ -85,6 +88,8 @@ class CallYardiOperationParams(BaseModel):
 
 
 class YardiOperationResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     operation: str = ""
     raw_xml: str = ""
     parsed: dict = {}
@@ -95,11 +100,15 @@ class ListWsdlOperationsParams(BaseModel):
 
 
 class WsdlOperation(sdl.Entity):
+    id: str = ""
+    title: str = ""
     name: str = ""
     soap_action: str = ""
 
 
 class WsdlOperationList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     target_namespace: str = ""
     operations: list[WsdlOperation] = []
 
@@ -155,6 +164,8 @@ class LeaseInfoParams(BaseModel):
 
 
 class YardiRecordList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     interface: str = ""
     operation: str = ""
     records: list[dict] = []
@@ -162,6 +173,8 @@ class YardiRecordList(sdl.Entity):
 
 
 class YardiRecord(sdl.Entity):
+    id: str = ""
+    title: str = ""
     interface: str = ""
     operation: str = ""
     record: dict = {}
@@ -384,12 +397,16 @@ class AuditPropertiesParams(BaseModel):
 
 
 class AuditFinding(sdl.Entity):
+    id: str = ""
+    title: str = ""
     severity: str = ""
     yardi_property_id: str = ""
     message: str = ""
 
 
 class AuditReport(sdl.Entity):
+    id: str = ""
+    title: str = ""
     checked_at: str = ""
     property_count: int = 0
     findings: list[AuditFinding] = []
@@ -402,6 +419,8 @@ class DelinquencyReportParams(BaseModel):
 
 
 class DelinquentResident(sdl.Entity):
+    id: str = ""
+    title: str = ""
     tenant_code: str = ""
     resident_name: str = ""
     balance_due: float = 0.0
@@ -409,6 +428,8 @@ class DelinquentResident(sdl.Entity):
 
 
 class DelinquencyReport(sdl.Entity):
+    id: str = ""
+    title: str = ""
     yardi_property_id: str = ""
     as_of_date: str = ""
     total_balance_due: float = 0.0
@@ -421,6 +442,8 @@ class OpenWorkOrdersReportParams(BaseModel):
 
 
 class OpenWorkOrder(sdl.Entity):
+    id: str = ""
+    title: str = ""
     service_request_id: str = ""
     unit_id: str = ""
     priority: str = ""
@@ -429,6 +452,8 @@ class OpenWorkOrder(sdl.Entity):
 
 
 class OpenWorkOrdersReport(sdl.Entity):
+    id: str = ""
+    title: str = ""
     yardi_property_id: str = ""
     open_count: int = 0
     urgent_count: int = 0
