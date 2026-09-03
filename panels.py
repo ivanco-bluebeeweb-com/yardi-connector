@@ -45,6 +45,9 @@ def _connect_form() -> ui.UINode:
         {"value": k, "label": v} for k, v in _INTERFACE_LABELS.items()
     ]
     return ui.Stack(direction="v", gap=3, align="stretch", children=[
+        ui.Button("Sign in with Yardi (SSO / Voyager Auth)", variant="primary", size="sm", icon="login"),
+        ui.Divider(),
+        ui.Text("Or connect via Standard Interface WSDL / Web Services", variant="caption"),
         ui.Form(
             action="connect_yardi",
             submit_label="Connect interface",
@@ -124,8 +127,7 @@ async def yardi_connect_panel(ctx, **kwargs) -> ui.UINode:
         header,
         _connections_summary(connections),
         ui.Divider(),
-        ui.Button("View property audit", variant="primary", size="sm", full_width=True,
-                  icon="Building2", on_click=ui.Call("__panel__yardi_center")),
+        ui.Button("View property audit", variant="primary", size="sm", icon="Building2", on_click=ui.Call("__panel__yardi_center")),
         ui.Divider(),
         _connect_form(),
         ui.Divider(),
