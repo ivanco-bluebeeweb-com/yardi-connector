@@ -6049,5 +6049,57 @@
       "refresh": "manual",
       "center_overlay": true
     }
-  ]
+  ],
+  "pricing": {
+    "model": "per_action",
+    "currency": "credits",
+    "monthly_price": 0,
+    "free_tools": [
+      "connect_yardi",
+      "list_connections",
+      "disconnect_yardi"
+    ],
+    "tool_prices": {
+      "connect_yardi": 0,
+      "list_connections": 0,
+      "disconnect_yardi": 0,
+      "list_yardi_properties": 8,
+      "get_yardi_unit_information": 8,
+      "list_yardi_residents": 8,
+      "get_yardi_resident_info": 8,
+      "list_yardi_rentroll": 8,
+      "import_yardi_contacts": 16,
+      "get_yardi_lease_information": 8,
+      "list_yardi_resident_transactions": 8,
+      "import_yardi_charge": 16,
+      "import_yardi_receipt": 16,
+      "import_yardi_payable": 16,
+      "get_yardi_vendor": 8,
+      "get_yardi_delinquency_report": 8,
+      "list_yardi_invoice_register": 8,
+      "import_yardi_invoice": 16,
+      "list_yardi_purchase_orders": 8,
+      "import_yardi_purchase_order": 16,
+      "get_yardi_job_cost": 8,
+      "get_yardi_budget": 8,
+      "search_yardi_service_requests": 8,
+      "create_yardi_service_request": 16,
+      "list_yardi_service_request_attachments": 8,
+      "get_yardi_open_work_orders_report": 8,
+      "get_yardi_revenue_data": 8,
+      "import_yardi_revenue_update": 16,
+      "list_yardi_scheduled_renewals": 8,
+      "list_yardi_lease_offers": 8,
+      "import_yardi_renewal_selection": 16,
+      "list_yardi_available_units": 8,
+      "import_yardi_guest_card": 16,
+      "search_yardi_guest_activity": 8,
+      "get_yardi_application": 8,
+      "import_yardi_application": 16,
+      "call_yardi_operation": 16,
+      "list_yardi_wsdl_operations": 8,
+      "audit_yardi_properties": 20
+    },
+    "notes": "Standard platform scale {0, 8, 16, 20, 40}. 0 = access setup and harmless discovery. 8 = read/list/search. 16 = standard single mutation/CRUD. 20 = bulk or heavy audit operation."
+  }
 }
